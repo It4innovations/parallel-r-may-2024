@@ -1,7 +1,7 @@
 # Set arguments ----
 
-resolution <- as.integer(4000) # Resolution of output image. This increases the exponentially x^2.
-max.iter <- as.integer(10000)
+resolution <- as.integer(400) # Resolution of output image. This increases the exponentially x^2.
+max.iter <- as.integer(100)
 
 # Defining functions ----
 
@@ -48,7 +48,8 @@ print(microbenchmark::microbenchmark(
     MARGIN = c(1, 2),
     FUN = mandelbrot
   ),
-  for_loop = for_loop(points)
+  for_loop = for_loop(points),
+  times=5
 ))
 
 # Check the results correctness ----
