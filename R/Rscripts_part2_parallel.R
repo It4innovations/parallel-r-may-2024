@@ -2,7 +2,7 @@
 #*pepare framework
 #************************************************
 
-myDir=paste("/home", Sys.getenv("USER"),'Rscripts/resources', sep="/")
+myDir=getwd()
 myDir_Data=paste(myDir,"data", sep="/")
 
 ifelse(!dir.exists(myDir), dir.create(myDir), FALSE)
@@ -81,6 +81,9 @@ library(parallel)
 library(tictoc)
 library(pracma)
 
+
+parallel::detectCores() 
+
 #************************************************
 # for loop
 #************************************************
@@ -128,8 +131,8 @@ time_foreach_dopar=toc()
 #  foreach dopar - with cluster
 #************************************************
 set.seed(2021)
-clust <- makeCluster(12, type="PSOCK")  
-registerDoParallel(clust,cores=12)  # use multicore, set to the number of our cores - needed for foerach dopar
+clust <- makeCluster(32, type="PSOCK")  
+registerDoParallel(clust,cores=32)  # use multicore, set to the number of our cores - needed for foerach dopar
 
 sum_rand=rep(0,K-1);
 tic()
