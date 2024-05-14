@@ -24,6 +24,7 @@ Data_row_means_2 <- apply(Data_read[,-1],1,FUN =mean)
 
 Data_both_squares <- apply(Data_read[,-1],c(1,2),FUN = function(x) return(x^2))
 
+summary(Data_read)
 
 #************************************************
 # lapply
