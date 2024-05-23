@@ -83,20 +83,22 @@ library(tictoc)
 library(pracma)
 
 
-parallel::detectCores() 
+n_cores=parallel::detectCores() 
 
 #************************************************
 # for loop
 #************************************************
-N=1000
+N=2000
 K=100
 set.seed(2021)
 sum_rand=rep(0,K-1);
 tic()
+time_for_sys=system.time({
 for (i in c(1:K)){
   A=rand(N,N)
   sum_rand[i]=sum(A)
 }
+})
 time_for=toc()
 
 
@@ -106,10 +108,12 @@ time_for=toc()
 set.seed(2021)
 sum_rand=rep(0,K-1);
 tic()
-foreach (i = c(1:K)) %do% {
+time_foreach_sys=system.time({
+  foreach (i = c(1:K)) %do% {
   A=rand(N,N)
   sum_rand[i]=sum(A)
-}
+  }
+})
 time_foreach=toc()
 
 #************************************************
@@ -118,33 +122,62 @@ time_foreach=toc()
 set.seed(2021)
 sum_rand=rep(0,K-1);
 tic()
+time_foreachdopar_sys=system.time({
 print("for each-dopar (no cluster)")
 foreach (i = c(1:K)) %dopar% {
   library(pracma)
   A= rand(N,N)
   sum_rand[i]=sum(A)
-}
+}}
+)
 time_foreach_dopar=toc()
 
 
 
 #************************************************
-#  foreach dopar - with cluster
+#  foreach dopar - with cluster - option 1
 #************************************************
 set.seed(2021)
-clust <- makeCluster(32, type="PSOCK")  
-registerDoParallel(clust,cores=32)  # use multicore, set to the number of our cores - needed for foerach dopar
-
+clust <- makeCluster(n_cores-1)  
+registerDoParallel(clust)  # use multicore, set to the number of our cores - needed for foerach dopar
+getDoParName()
 sum_rand=rep(0,K-1);
 tic()
+time_foreachdopar_1_sys=system.time({
 print("for each-dopar (cluster allocated)")
 foreach (i = c(1:K)) %dopar% {
   library(pracma)
   A=rand(N)
   sum_rand[i]=sum(A)
-}
+}}
+)
 time_foreach_dopar_1=toc()
 registerDoSEQ()
+
+
+#************************************************
+#  foreach dopar - with cluster - option 2
+#************************************************
+set.seed(2021)
+registerDoParallel(n_cores-1)  # use multicore, set to the number of our cores - needed for foerach dopar
+getDoParName()
+sum_rand=rep(0,K-1);
+tic()
+time_foreachdopar_2_sys=system.time({
+  print("for each-dopar (cluster allocated)")
+  foreach (i = c(1:K)) %dopar% {
+    library(pracma)
+    A=rand(N)
+    sum_rand[i]=sum(A)
+  }}
+)
+time_foreach_dopar_1=toc()
+registerDoSEQ()   #this registers sequential mode - equivalent
+
+times_for_sys_1<-rbind(time_for_sys,time_foreach_sys,time_foreachdopar_sys,time_foreachdopar_1_sys,time_foreachdopar_2_sys) 
+
+
+
 
 #************************************************
 #  apply and parallel apply
