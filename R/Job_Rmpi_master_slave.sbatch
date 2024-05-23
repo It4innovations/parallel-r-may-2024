@@ -7,5 +7,5 @@
 #SBATCH --output=logs/%x_%j.out
 
 module load OpenMPI/4.1.4-GCC-11.3.0
-module load R/4.2.1-foss-2022a
-srun  Rscript Rmpi_master_slave.R
+module load R/4.2.1-foss-2022a *****UPDATE
+srun  Rscript Rmpi_master_slave.R  ****update
