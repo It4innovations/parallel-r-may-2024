@@ -88,8 +88,8 @@ n_cores=parallel::detectCores()
 #************************************************
 # for loop
 #************************************************
-N=2000
-K=100
+N=3000
+K=150
 set.seed(2021)
 sum_rand=rep(0,K-1);
 tic()
@@ -239,3 +239,24 @@ time_parSapply<-system.time({
 times_apply<-rbind(time_lapply,time_sapply,time_parLapply,time_parSapply,time_mcLapply) 
 #times_apply<-rbind(time_lapply,time_sapply,time_parLapply,time_parSapply,time_mcLapply,time_foreach_dopar_fork) 
 print(times_apply[,1:3])
+
+
+
+# simple very parallel
+library(parallel)
+library(tictoc)
+
+f <- function(...) {
+  Sys.sleep(1) 
+  "DONE"
+}
+
+tic()
+res <- lapply(1:25, f)
+t1=toc()
+#> 5.025 sec elapsed
+
+tic()
+res <- mclapply(1:25, f, mc.cores = 25)
+t2=toc()
+#> 1.019 sec elapsed
