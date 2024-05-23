@@ -2,7 +2,11 @@
 #*prepare framework
 #************************************************
 
-setwd("C:/Users/janez/OneDrive - Rudolfovo – znanstveno in tehnološko središče Novo Mesto/Documents/UL FS/Projekti/2022/EuroCC II/Izobrazecanja UL/Parallel R")
+
+if (Sys.info()["sysname"]=="Windows"){
+  setwd("C:/Users/janez/OneDrive - Rudolfovo – znanstveno in tehnološko središče Novo Mesto/Documents/UL FS/Projekti/2022/EuroCC II/Izobrazecanja UL/Parallel R May 24/parallel-r-may-2024")
+}
+
 dir()
 
 
