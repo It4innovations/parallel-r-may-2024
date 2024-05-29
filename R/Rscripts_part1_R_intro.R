@@ -10,6 +10,43 @@ if (Sys.info()["sysname"]=="Windows"){
 dir()
 
 
+# prepare data
+N=1000;
+Data=data.frame(group=character(N),ints=numeric(N),reals=numeric(N))
+Data$group=sample(c("a","b","c"), 1000, replace=TRUE);
+Data$ints=rbinom(N,10,0.5);
+Data$reals=rnorm(N);
+
+head(Data)
+Data
+
+write.table(Data, file='data/Data_Ex_1.txt', append = FALSE, dec = ".",col.names = TRUE)
+
+ls()
+rm(list = ls())
+
+#*********************************************
+# compute means and counts by groups
+# group count_ints mean_ints
+#*********************************************
+
+# primitive solution
+Group_lev=sort(unique(Data_read$group))
+
+Tab_summary=data.frame(group=character(3),count_ints=integer(3),mean_ints=numeric(3))
+Tab_summary$group<-Group_lev
+for (i in c(1:3)){
+  sub_data = subset(Data_read,group==Group_lev[i])
+  Tab_summary$count_ints[i]<-nrow(sub_data)
+  Tab_summary$mean_ints[i]<-mean(sub_data$ints)
+}
+
+
+s <- split(Data_read, Data_read$group)
+Tab_summary1<-t(sapply(s, function(x) return(c(length(x$group),mean(x$ints)) )))
+
+Tab_summary2<-cbind(aggregate(ints~group,data = Data_read,FUN=length),aggregate(ints~group,data = Data_read,FUN=mean))
+
 #************************************************
 # apply
 #************************************************
