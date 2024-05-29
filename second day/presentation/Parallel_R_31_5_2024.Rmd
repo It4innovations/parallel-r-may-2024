@@ -1,7 +1,7 @@
 ---
-title: "Rcpp Introduction"
+title: "Parallel R"
 author: "Tomas Martinovic"
-date: "`r Sys.Date()`"
+date: "31..5.2024"
 output:
   beamer_presentation:
     theme: "EuroCC"
@@ -104,7 +104,7 @@ mandelbrot <- function(c, max_iter = 100) {
 
 ## Converting mandelbrot function to C
 
-```{cpp}
+```{Rcpp}
 int Mandel(double real, double im,
            int max_iter = 100)
 {
