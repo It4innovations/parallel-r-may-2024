@@ -31,6 +31,18 @@ rm(list = ls())
 #*********************************************
 
 # primitive solution
+
+Data_read<-read.table(file='data/Data_Ex_1.txt',header = TRUE)
+# first few rows
+head(Data_read)
+#10 th row
+Data_read[10,]
+# column group
+Data_read$group
+Data_read[,1]		
+
+
+
 Group_lev=sort(unique(Data_read$group))
 
 Tab_summary=data.frame(group=character(3),count_ints=integer(3),mean_ints=numeric(3))
@@ -46,6 +58,13 @@ s <- split(Data_read, Data_read$group)
 Tab_summary1<-t(sapply(s, function(x) return(c(length(x$group),mean(x$ints)) )))
 
 Tab_summary2<-cbind(aggregate(ints~group,data = Data_read,FUN=length),aggregate(ints~group,data = Data_read,FUN=mean))
+
+
+#*****************
+library(parallel)
+detectCores()
+
+
 
 #************************************************
 # apply

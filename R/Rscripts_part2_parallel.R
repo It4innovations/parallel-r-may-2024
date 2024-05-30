@@ -80,8 +80,9 @@ time_foreach_dopar=toc()
 #************************************************
 #  foreach dopar - with cluster - option 1
 #************************************************
+
 set.seed(2021)
-clust <- makeCluster(n_cores-1)  
+clust <- makeCluster(2)  
 registerDoParallel(clust)  # use multicore, set to the number of our cores - needed for foerach dopar
 getDoParName()
 sum_rand=rep(0,K-1);
@@ -102,7 +103,7 @@ registerDoSEQ()
 #  foreach dopar - with cluster - option 2
 #************************************************
 set.seed(2021)
-registerDoParallel(n_cores-1)  # use multicore, set to the number of our cores - needed for foerach dopar
+registerDoParallel(2)  # use multicore, set to the number of our cores - needed for foerach dopar
 getDoParName()
 sum_rand=rep(0,K-1);
 tic()
@@ -145,7 +146,7 @@ time_sapply<-system.time({
 time_mcLapply<-system.time({
   set.seed(2021)
 #  sum_rand_mcLapply=mclapply(X=rep(N,K),FUN=mat_sum,mc.cores = 12)
-  sum_rand_mcLapply=mclapply(X=rep(N,K),FUN=mat_sum,mc.cores = 1)
+  sum_rand_mcLapply=mclapply(X=rep(N,K),FUN=mat_sum,mc.cores = 2)
 })
 
 #forking with foreach dopar
@@ -162,7 +163,7 @@ time_mcLapply<-system.time({
 
 
 # socketing
-clust <- makeCluster(n_cores, type="PSOCK")  
+clust <- makeCluster(2, type="PSOCK")  
 time_parLapply<-system.time({
   set.seed(2021)
   sum_rand_parLapply=parLapply(clust,rep(N,K),fun=mat_sum)
@@ -171,7 +172,7 @@ stopCluster(clust)
 
 
 
-clust <- makeCluster(n_cores, type="PSOCK")  
+clust <- makeCluster(2, type="PSOCK")  
 time_parSapply<-system.time({
   set.seed(2021)
   sum_rand_parSapply=parSapply(clust,rep(N,K),FUN=mat_sum)
@@ -200,6 +201,6 @@ t1=toc()
 #> 5.025 sec elapsed
 
 tic()
-res <- mclapply(1:25, f, mc.cores = 25)
+res <- mclapply(1:25, f, mc.cores = 5)
 t2=toc()
 #> 1.019 sec elapsed
