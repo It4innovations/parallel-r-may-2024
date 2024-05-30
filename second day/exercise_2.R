@@ -2,19 +2,19 @@
 size = 1000
 
 # Input data ----
-input_mtx <- matrix(
-  c(a = rnorm(size),
+input_mtx <- matrix(c(
+  a = rnorm(size),
   b = rnorm(size, 5),
   c = rnorm(size, 10),
-  d = rnorm(size, 15)),
-  ncol = 4,
-  byrow = TRUE
-)
+  d = rnorm(size, 15)
+),
+ncol = 4,
+byrow = TRUE)
 
 # Compute mean for each column ----
-out <- apply(input_mtx, 
-      2,
-      mean)
+out <- apply(input_mtx,
+             2,
+             mean)
 
 print(out)
 # C part ----
@@ -44,7 +44,7 @@ out_c <- col_mean(input_mtx)
 
 all.equal(out, out_c)
 
-microbenchmark::microbenchmark(r = apply(input_mtx, 
+microbenchmark::microbenchmark(r = apply(input_mtx,
                                          2,
                                          mean),
                                c = col_mean(input_mtx))
