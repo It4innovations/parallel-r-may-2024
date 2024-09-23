@@ -77,13 +77,24 @@ time_foreach_dopar=toc()
 
 
 
+bench_1<-microbenchmark::microbenchmark(foreach (i = c(1:K)) %dopar% {
+  library(pracma)
+  A= rand(N,N)
+  sum_rand[i]=sum(A)
+ },
+ foreach (i = c(1:K)) %do% {
+   A=rand(N,N)
+   sum_rand[i]=sum(A)
+ },times = 10
+)
+
 #************************************************
 #  foreach dopar - with cluster - option 1
 #************************************************
 
 set.seed(2021)
 clust <- makeCluster(2)  
-registerDoParallel(clust)  # use multicore, set to the number of our cores - needed for foerach dopar
+registerDoParallel(clust)  # use SNOW in backhand, set to the number of our cores - needed for foerach dopar
 getDoParName()
 sum_rand=rep(0,K-1);
 tic()
@@ -204,3 +215,37 @@ tic()
 res <- mclapply(1:25, f, mc.cores = 5)
 t2=toc()
 #> 1.019 sec elapsed
+
+
+microbenchmark::microbenchmark(
+  for_loop = for_loop(resolution = resolution,
+                      max_iter = max_iter,
+                      cmin = cmin,
+                      cmax = cmax),
+  for_c = for_loop_c(resolution = resolution,
+                     max_iter = max_iter,
+                     cmin = cmin,
+                     cmax = cmax),
+  `c` =  Mandelbrot(resolution = resolution,
+                    max_iter = max_iter,
+                    cmin = cmin,
+                    cmax = cmax),
+  times = 2
+)
+
+
+
+mc_lapply_f = function(ncores=2,N,K){
+  set.seed(2021)
+  sum_rand_mcLapply=mclapply(X=rep(N,K),FUN=mat_sum,mc.cores = ncores)
+}
+
+l_lapply_f = function(ncores=2,N,K){
+  clust <- makeCluster(ncores, type="PSOCK")  
+  set.seed(2021)
+  sum_rand_parSapply=parSapply(clust,rep(N,K),FUN=mat_sum)
+  stopCluster(clust)
+}
+
+times<-microbenchmark::microbenchmark(mc_lapply_f(10,100,10),l_lapply_f(10,100,10))
+

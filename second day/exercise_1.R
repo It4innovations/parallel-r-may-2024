@@ -38,9 +38,13 @@ plot(out, type = "l")
 
 Rcpp::cppFunction(
   "
-  NumericVector logistic_map_c(double x, double mu, int iter){
+    NumericVector logistic_map_c(double x, double mu, int iter){
     NumericVector out(iter);
-    ...
+    out[0] = x;
+    for (i = 1,i<iter,i++) {
+      x = mu * x * (1 - x);
+      out[i] = x;
+    }
     return out;
   }
   "

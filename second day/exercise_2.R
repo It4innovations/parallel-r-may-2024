@@ -32,7 +32,9 @@ Rcpp::cppFunction(
   NumericVector col_mean(NumericMatrix input){
     int ncol = input.cols();
     NumericVector out(ncol);
-    ...
+     for (int i=0;i<ncol;i++){
+       out[i]=mean(input(_,i));
+     }
     return out;
   }
   "

@@ -113,8 +113,8 @@ out_for_c <- for_loop_c(resolution = resolution,
                         cmax = cmax)
 
 # Visualise
-# plotly::plot_ly(z = t(out_for_c),
-#                 type = "heatmap")
+ plotly::plot_ly(z = t(out_for_c),
+                 type = "heatmap")
 
 # Check results correctness
 all.equal(out_for,
@@ -161,8 +161,8 @@ out_c <- Mandelbrot(resolution = 1000,
                     cmax = cmax)
 
 # Visualise
-# plotly::plot_ly(z = t(out_c),
-#                 type = "heatmap")
+ plotly::plot_ly(z = t(out_c),
+                 type = "heatmap")
 
 # Check results correctness
 all.equal(out_for,

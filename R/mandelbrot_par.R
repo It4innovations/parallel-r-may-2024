@@ -49,3 +49,22 @@ stopCluster(cl)
 # Plotly solution
 plotly::plot_ly(z = t(out_for),
                 type = "heatmap")
+
+
+Rcpp::cppFunction(
+"
+int Mandel(double real, double im, int max_iter=100)
+{
+std::complex<double> c(real, im);
+std::complex<double> z=c;
+  for (int i=0;i < max_iter;i++){
+    z=z*z+c;
+    if (std::abs(z) > 2){
+      return i;
+    }
+  }
+  return max_iter;
+}
+"  
+  
+)
