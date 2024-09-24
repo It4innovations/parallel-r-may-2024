@@ -1,6 +1,8 @@
 # Set parameters ----
 size = 1000
 
+#delete this
+
 # Input data ----
 input_mtx <- matrix(c(
   a = rnorm(size),
